@@ -1,19 +1,15 @@
 {% extends 'layout.html' %}
-
-{% block title %}Posts{% endblock %}
-
 {% block content %}
 <h1>Pushes</h1>
 <p>You have <strong>{{ pushes.length }}</strong> pushes!</p>
 <input placeholder="Push text" id="pushText" type="text" class="validate">
 <a class="btn-floating btn-large waves-effect waves-light red" onclick="addPush()"><i class="material-icons">+</i></a>
-
-<p><a href="/push/new">Create a Post</a></p>
+<br /><br />
 <ul id="pushesList">
     {% for push in pushes %}
     <li>
-        <h2>{{ push.text }}</h2>
-        <p><a href="/push/{{ push.id }}">Read push</a></p>
+        <div><b>{{ push.text }}</b> <a href="/push/{{ push.id }}">and then just touch me</a></div>
+        <p class="hint">created: {{ push.created }} </p>        
     </li>
     {% endfor %}
 </ul>
@@ -27,6 +23,7 @@
             data: text
         }).then(() => {
             console.log('OK');
+            location.reload();
         }).catch(error => {
             console.log('not ok' + error.message);
         });

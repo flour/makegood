@@ -18,30 +18,28 @@ router.get('/', getPushs)
 app.use(router.routes());
 
 async function getPushs(ctx) {
-  await ctx.render('list', { pushes });
+  await ctx.render('list', { pushes: pushes.reverse() });
 }
 
 async function getPush(ctx) {
-  const id = ctx.params.id;
-  const push = pushes[id];
+  const id = parseInt(ctx.params.id, 10);
+  const push = pushes.find(push => push.id === id);
   if (!push) {
-    ctx.throw(404, 'invalid post id');
+    ctx.throw(404, 'invalid post id');  
   }
   await ctx.render('show', { push });
 }
 
 async function createPush(ctx) {
   const push = ctx.request.body;
-  const id = pushes.push(
-    {
-      text: push.data,
-      created_at: new Date(),
-      id: -1
-    }
-  ) - 1;
-  push.id = id;
+  const newPush = {
+    text: push.data,
+    created: (new Date().toString()),
+    id: pushes.length + 1
+  };
+  pushes.push(newPush);
   ctx.body = pushes;
-  await ctx.upda('/');
+  await ctx.redirect('/');
 }
 
 if (!module.parent) {
